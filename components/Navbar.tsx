@@ -21,7 +21,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="bg-background/50 sticky top-0 z-50 w-full backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-2xl items-center justify-between px-8">
         <span className="font-heading text-sm font-medium">
           TheDailyRiddle
