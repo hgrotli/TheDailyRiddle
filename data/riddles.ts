@@ -8,6 +8,6 @@ export const riddles: Riddle[] = [
   {
     riddle: "I get wetter the more I dry. What am I?",
     answer: "towel",
-    solvedPercentage: 63,
+    solvedPercentage: 64,
   },
 ];
