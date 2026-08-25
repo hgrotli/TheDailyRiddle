@@ -14,9 +14,27 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = "TheDailyRiddle";
+const description =
+  "A new riddle every day. Guess the answer before you run out of lives.";
+
 export const metadata: Metadata = {
-  title: "TheDailyRiddle",
-  description: "TheDailyRiddle",
+  title: {
+    default: title,
+    template: `%s | ${title}`,
+  },
+  description,
+  openGraph: {
+    title,
+    description,
+    siteName: title,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
