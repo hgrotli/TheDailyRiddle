@@ -10,7 +10,7 @@ export default function AnswerCard({ guess, locked }: AnswerCardProps) {
     <Card className="w-full max-w-md bg-transparent ring-0">
       <CardContent className="flex items-center gap-2 text-lg tracking-widest text-[#F5C371]">
         <span className="shrink-0">You are a/an</span>
-        <span className="flex h-8 flex-1 items-center overflow-hidden rounded bg-muted/50 px-2 whitespace-nowrap lowercase backdrop-blur-md">
+        <span className="flex h-8 flex-1 items-center overflow-hidden rounded border border-[#F5C371] px-2 whitespace-nowrap lowercase">
           {guess}
           {!locked && (
             <span className="h-5 w-0.5 shrink-0 animate-[blink_1s_step-end_infinite] bg-[#F5C371]" />

@@ -1,9 +1,12 @@
-export default function AboutSection() {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+};
+
+export default function AboutPage() {
   return (
-    <section
-      id="about"
-      className="mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-2xl scroll-mt-14 flex-col justify-center gap-8 border border-dashed border-transparent p-8"
-    >
+    <main className="mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-2xl flex-col justify-center gap-8 border border-dashed border-transparent p-8">
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold">What is TheDailyRiddle?</h2>
         <p className="text-muted-foreground text-lg">
@@ -20,6 +23,6 @@ export default function AboutSection() {
           <li>Solve the riddle before you run out of lives</li>
         </ul>
       </div>
-    </section>
+    </main>
   );
 }

@@ -9,14 +9,14 @@ type ResultScreenProps = {
   status: "won" | "lost";
   riddle: string;
   answer: string;
-  solvedPercentage: number;
+  solveCount: number;
 };
 
 export default function ResultScreen({
   status,
   riddle,
   answer,
-  solvedPercentage,
+  solveCount,
 }: ResultScreenProps) {
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const won = status === "won";
@@ -57,7 +57,9 @@ export default function ResultScreen({
             </div>
             <div className="flex flex-col gap-1 pt-3">
               <span className="text-muted-foreground text-sm">Solved by</span>
-              <span className="text-lg">{solvedPercentage}% of players</span>
+              <span className="text-lg">
+                {solveCount} {solveCount === 1 ? "player" : "players"}
+              </span>
             </div>
           </CardContent>
         </Card>

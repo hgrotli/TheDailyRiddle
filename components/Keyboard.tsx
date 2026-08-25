@@ -36,9 +36,7 @@ export default function Keyboard({
                     ? "h-14 flex-[1.5] px-1 text-xs"
                     : "h-14 flex-1 px-0"
                 } lowercase disabled:opacity-100 ${
-                  isHighlightedEnter
-                    ? ""
-                    : "bg-secondary/50 backdrop-blur-md"
+                  isHighlightedEnter ? "" : "bg-secondary"
                 }`}
                 onClick={() => onKeyPress?.(key)}
               >
