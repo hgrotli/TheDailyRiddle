@@ -178,6 +178,10 @@
   }
 }
 
+.dark html {
+  background: oklch(0.01 0 0);
+}
+
 .dark body {
   background:
     radial-gradient(
