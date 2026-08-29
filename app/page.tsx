@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import RiddleCard from "@/components/RiddleCard";
-import AnswerCard from "@/components/AnswerCard";
-import Keyboard from "@/components/Keyboard";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import LivesCard, { HEART_ANIMATION_DURATION_MS } from "@/components/LivesCard";
 import ResultScreen from "@/components/ResultScreen";
-import SideAds from "@/components/SideAds";
 
 const GAME_FADE_MS = 500;
 
@@ -22,6 +22,7 @@ export default function Home() {
   const [showResult, setShowResult] = useState(false);
   const [gameStatus, setGameStatus] = useState<"won" | "lost" | null>(null);
   const nextRotationAt = useRef<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const loadRiddle = useCallback(() => {
     fetch("/api/riddle")
@@ -54,48 +55,38 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [loadRiddle]);
 
-  const handleKeyPress = useCallback(
-    (key: string) => {
-      if (isLocked) return;
-      if (key === "Backspace") {
-        setGuess((prev) => prev.slice(0, -1));
-      } else if (key === "Enter") {
-        if (guess.length === 0) return;
-        const willLoseIfWrong = lives <= 1;
-        setIsLocked(true);
-        fetch("/api/guess", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ guess, reveal: willLoseIfWrong }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.correct) {
-              setAnswer(data.answer);
-              setSolveCount((prev) => prev + 1);
-              setGameStatus("won");
-              setGameFading(true);
-              setTimeout(() => {
-                setShowResult(true);
-              }, GAME_FADE_MS);
-            } else if (willLoseIfWrong) {
-              setAnswer(data.answer);
-              setLives(0);
-              setGameStatus("lost");
-              setGameFading(true);
-              setTimeout(() => {
-                setShowResult(true);
-              }, GAME_FADE_MS);
-            } else {
-              setResult("wrong");
-            }
-          });
-      } else {
-        setGuess((prev) => prev + key);
-      }
-    },
-    [isLocked, guess, lives]
-  );
+  const handleSubmit = useCallback(() => {
+    if (isLocked || guess.length === 0) return;
+    const willLoseIfWrong = lives <= 1;
+    setIsLocked(true);
+    fetch("/api/guess", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ guess, reveal: willLoseIfWrong }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.correct) {
+          setAnswer(data.answer);
+          setSolveCount((prev) => prev + 1);
+          setGameStatus("won");
+          setGameFading(true);
+          setTimeout(() => {
+            setShowResult(true);
+          }, GAME_FADE_MS);
+        } else if (willLoseIfWrong) {
+          setAnswer(data.answer);
+          setLives(0);
+          setGameStatus("lost");
+          setGameFading(true);
+          setTimeout(() => {
+            setShowResult(true);
+          }, GAME_FADE_MS);
+        } else {
+          setResult("wrong");
+        }
+      });
+  }, [isLocked, guess, lives]);
 
   const handleRevealComplete = useCallback(() => {
     if (result === "wrong") {
@@ -106,25 +97,12 @@ export default function Home() {
     } else if (result === null) {
       setGuess("");
       setIsLocked(false);
+      inputRef.current?.focus();
     }
   }, [result]);
 
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Backspace" || e.key === "Enter") {
-        handleKeyPress(e.key);
-      } else if (/^[a-zA-Z]$/.test(e.key)) {
-        handleKeyPress(e.key.toUpperCase());
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleKeyPress]);
-
   return (
     <main className="flex h-[calc(100svh-3.5rem)] flex-col items-center justify-start">
-      <SideAds />
       {showResult && gameStatus && answer ? (
         <ResultScreen
           status={gameStatus}
@@ -134,7 +112,7 @@ export default function Home() {
         />
       ) : (
         <div
-          className={`mx-auto flex h-full w-full max-w-2xl flex-col items-center justify-between gap-4 border border-dashed border-transparent p-8 transition-opacity duration-500 ${
+          className={`mx-auto flex h-full w-full max-w-[336px] flex-col items-center justify-center gap-8 border border-dashed border-transparent transition-opacity duration-500 ${
             gameFading ? "opacity-0" : "opacity-100"
           }`}
         >
@@ -144,18 +122,45 @@ export default function Home() {
             </span>
           ) : (
             <>
-              <LivesCard lives={lives} />
               <RiddleCard
                 riddle={riddleText}
                 result={result}
                 onRevealComplete={handleRevealComplete}
               />
-              <AnswerCard guess={guess} locked={isLocked} />
-              <Keyboard
-                onKeyPress={handleKeyPress}
-                hasGuess={guess.length > 0}
-                locked={isLocked}
-              />
+              <Card className="w-full max-w-[336px] border border-transparent bg-transparent ring-0">
+                <CardContent className="flex flex-col gap-4">
+                  <div className="flex justify-center">
+                    <LivesCard lives={lives} />
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      ref={inputRef}
+                      className="w-full"
+                      placeholder="Type your answer"
+                      value={guess}
+                      onChange={(e) =>
+                        setGuess(e.target.value.replace(/[^a-zA-Z]/g, ""))
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSubmit();
+                      }}
+                      disabled={isLocked}
+                      autoCapitalize="off"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck={false}
+                      enterKeyHint="done"
+                      lang="en"
+                    />
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={isLocked || guess.length === 0}
+                    >
+                      Guess
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </>
           )}
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CircleX, ThumbsDown, ThumbsUp, Trophy } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Countdown from "@/components/Countdown";
 
 type ResultScreenProps = {
   status: "won" | "lost";
@@ -24,6 +25,7 @@ export default function ResultScreen({
   return (
     <>
       <div className="flex w-full max-w-md flex-col items-center gap-4 pb-[116px] lg:pb-8">
+        <Countdown />
         <Card className="w-full max-w-md animate-in fade-in zoom-in-95 bg-transparent ring-0 duration-500">
           <CardContent className="flex flex-col items-center gap-2 py-4 text-center">
             {won ? (

@@ -52,7 +52,7 @@ export default function RiddleCard({
   }, [revealed, content, onRevealComplete]);
 
   return (
-    <Card className="w-full max-w-md bg-transparent ring-0">
+    <Card className="w-full max-w-[336px] border border-transparent bg-transparent ring-0">
       <CardContent className="text-center text-lg">
         {content.split("").map((char, i) => (
           <span
