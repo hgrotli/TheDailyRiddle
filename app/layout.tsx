@@ -57,12 +57,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){var m=window.matchMedia("(prefers-color-scheme: dark)");function a(e){document.documentElement.classList.toggle("dark",e.matches)}a(m);m.addEventListener("change",a)})();`}
         </Script>
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3025620470413863"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        ></script>
       </head>
       <body className="min-h-screen flex flex-col">
         <Navbar />
