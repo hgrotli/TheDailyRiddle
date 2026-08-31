@@ -122,6 +122,9 @@ export default function Home() {
             </span>
           ) : (
             <>
+              <div className="flex justify-center">
+                <LivesCard lives={lives} />
+              </div>
               <RiddleCard
                 riddle={riddleText}
                 result={result}
@@ -129,9 +132,6 @@ export default function Home() {
               />
               <Card className="w-full max-w-[336px] border border-transparent bg-transparent ring-0">
                 <CardContent className="flex flex-col gap-4">
-                  <div className="flex justify-center">
-                    <LivesCard lives={lives} />
-                  </div>
                   <div className="flex gap-2">
                     <Input
                       ref={inputRef}
